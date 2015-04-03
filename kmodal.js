@@ -2,6 +2,12 @@
     $.fn.kmodal = function(config) {
         var handler = this.selector;
         
+        $('form.kmodal-kform').kform({
+            onSuccess: function(form,data){
+                $('.kmodal').modal('hide');
+            }
+        });
+        
         $(document).on('click',handler,function(e){
             e.preventDefault();
             
@@ -17,14 +23,6 @@
                     $('body').append(modalBox);
                     modalBox.modal('show');
                     
-                    modalBox.on('shown.bs.modal', function (e) {
-                        modalBox.find('form.kmodal-kform').kform({
-                            onSuccess: function(form,data){
-                                modalBox.modal('hide');
-                            }
-                        });
-                    });
-
                     modalBox.on('hidden.bs.modal', function (e) {
                         modalBox.modal('hide');
                         modalBox.remove();
@@ -41,9 +39,7 @@
             e.preventDefault();
             var body = $(this).closest('.modal-content').find('.modal-body');
             var form = body.find('form');
-            if(form.is('*')){
-                form.submit();
-            }
+            form.submit();
             return false;
         });
         
