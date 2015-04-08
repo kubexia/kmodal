@@ -4,7 +4,14 @@
         
         $('form.kmodal-kform').kform({
             onSuccess: function(form,data){
-                $('.kmodal').modal('hide');
+                setTimeout(function(){
+                    $('.kmodal').modal('hide');
+                },(data.message.delay !== undefined ? data.message.delay : 1000));
+            },
+            onError: function(form,data){
+                var footer = form.closest('.modal-content').find('.modal-footer');
+                footer.find('.modal-footer-buttons').show();
+                footer.find('.modal-footer-loading').remove();
             }
         });
         
@@ -38,6 +45,11 @@
         $(document).on('click','.kmodal-btn-save',function(e){
             e.preventDefault();
             var body = $(this).closest('.modal-content').find('.modal-body');
+            
+            var footer = $(this).closest('.modal-content').find('.modal-footer');
+            footer.find('.modal-footer-buttons').hide();
+            footer.append('<div class="modal-footer-loading">'+footer.attr('data-loading-text')+'</div>');
+            
             var form = body.find('form');
             form.submit();
             return false;
